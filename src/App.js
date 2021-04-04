@@ -8,6 +8,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilterTodos] = useState([]);
+  const [error, setError] = useState(false);
 
   const filterHandler = () => {
     switch (status) {
@@ -35,6 +36,8 @@ function App() {
         setInputText={setInputText}
         todos={todos}
         setTodos={setTodos}
+        error={error}
+        setError={setError}
         setStatus={setStatus}
       />
       <TodoList

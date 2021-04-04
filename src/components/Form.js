@@ -7,7 +7,7 @@ const Form = ({
   todos,
   setTodos,
   setStatus,
-  SetError,
+  setError,
   error
 }) => {
   const useStyles = makeStyles(() => ({
@@ -18,11 +18,24 @@ const Form = ({
   }));
   const classes = useStyles();
   const inputTextHandler = (e) => {
+    console.log("logging", e.target.value);
     setInputText(e.target.value);
   };
   const submitTodoHandler = (e) => {
     //when we hit the '+' it refreshes the page ..that is not our requirement thats y we use prevent default
     e.preventDefault();
+    if (inputText.trim() === "") {
+      console.log("its working");
+      setError(true);
+    } else {
+      setError(false);
+      setTodos([
+        ...todos,
+        { text: inputText, completed: false, id: Math.random() * 1000 }
+      ]);
+      console.log("todo value", todos);
+      setInputText(""); //to reset the input text to ""
+    }
     // if(e.target.value===undefined && e.key==='Enter')
     // {
     //     // SetError(true)
@@ -42,19 +55,17 @@ const Form = ({
     // console.log('todo value',todos);
     // setInputText("") //to reset the input text to ""
     // }
-
-    setTodos([
-      ...todos,
-      { text: inputText, completed: false, id: Math.random() * 1000 }
-    ]);
-    console.log("todo value", todos);
-    setInputText(""); //to reset the input text to ""
   };
   const statusHandler = (e) => {
     setStatus(e.target.value);
   };
   return (
     <React.Fragment>
+      {error && (
+        <div className={classes.root}>
+          <Alert severity="warning">Enter some details</Alert>
+        </div>
+      )}
       <form>
         <input
           onChange={inputTextHandler}
@@ -79,12 +90,6 @@ const Form = ({
           </select>
         </div>
       </form>
-
-      {error && (
-        <div className={classes.root}>
-          <Alert severity="warning">Enter some details</Alert>
-        </div>
-      )}
     </React.Fragment>
   );
 };
